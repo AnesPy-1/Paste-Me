@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}کد شما{% endblock %}
+{% block content %}
+<section class="card result-card">
+    {% if item.is_text %}
+        <h1>متن شما ذخیره شد</h1>
+        <p class="muted">کد شما:</p>
+    {% else %}
+        <h1>فایل آپلود شد</h1>
+        <p class="muted">کد فایل:</p>
+        <p class="file-name">{{ item.file_name }}</p>
+    {% endif %}
+    <div class="code-box">{{ item.code }}</div>
+    <button type="button" class="primary-button copy-button" data-copy-text="{{ item.code }}">کپی کد</button>
+    <a href="{% url 'item-detail' item.code %}" class="secondary-link">مشاهده محتوا</a>
+</section>
+{% endblock %}

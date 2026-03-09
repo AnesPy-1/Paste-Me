@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}مشاهده محتوا{% endblock %}
+{% block content %}
+<section class="card detail-card">
+    <div class="detail-head">
+        <h1>مشاهده محتوا</h1>
+        <span class="code-chip">{{ item.code }}</span>
+    </div>
+
+    {% if item.is_text %}
+        <article class="content-box">{{ item.content|linebreaksbr }}</article>
+        <button type="button" class="primary-button copy-button" data-copy-text="{{ item.content }}">دکمه کپی</button>
+    {% else %}
+        <p class="muted">نام فایل</p>
+        <p class="file-name">{{ item.file_name }}</p>
+        <a href="{{ item.file.url }}" class="download-link" download>دکمه دانلود</a>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="secondary-link">بازگشت به صفحه اصلی</a>
+</section>
+{% endblock %}

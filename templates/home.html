@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card hero">
+    <p class="eyebrow">pasteme</p>
+    <h1>PASTE ME</h1>
+    <p class="subtitle">اشتراک سریع متن و فایل با کد ۶ رقمی</p>
+
+    <div class="tab-actions">
+        <button class="tab-button{% if active_panel == 'text-panel' %} active{% endif %}" type="button" data-target="text-panel">پیست متن</button>
+        <button class="tab-button{% if active_panel == 'file-panel' %} active{% endif %}" type="button" data-target="file-panel">آپلود فایل</button>
+        <button class="tab-button{% if active_panel == 'lookup-panel' %} active{% endif %}" type="button" data-target="lookup-panel">مشاهده با کد</button>
+    </div>
+
+    <section id="text-panel" class="panel{% if active_panel == 'text-panel' %} active{% endif %}">
+        <form method="post" action="{% url 'paste-text' %}" class="stack-form">
+            {% csrf_token %}
+            {{ text_form.content }}
+            {% if text_form.errors %}<p class="form-error">{{ text_form.errors.content.0 }}</p>{% endif %}
+            <button type="submit" class="primary-button">پیست متن</button>
+        </form>
+    </section>
+
+    <section id="file-panel" class="panel{% if active_panel == 'file-panel' %} active{% endif %}">
+        <form method="post" action="{% url 'upload-file' %}" enctype="multipart/form-data" class="stack-form">
+            {% csrf_token %}
+            {{ file_form.file }}
+            {% if file_form.errors %}<p class="form-error">{{ file_form.errors.file.0 }}</p>{% endif %}
+            <button type="submit" class="primary-button">آپلود فایل</button>
+        </form>
+    </section>
+
+    <section id="lookup-panel" class="panel{% if active_panel == 'lookup-panel' %} active{% endif %}">
+        <form method="post" action="{% url 'lookup' %}" class="lookup-form">
+            {% csrf_token %}
+            {{ lookup_form.code }}
+            <button type="submit" class="primary-button">مشاهده</button>
+        </form>
+        {% if lookup_form.errors %}<p class="form-error">{{ lookup_form.errors.code.0 }}</p>{% endif %}
+    </section>
+</section>
+
+<footer class="footer">
+    made with ❤️ &amp; lots of ☕ by
+    <a href="https://t.me/AnesPy" target="_blank" rel="noopener noreferrer">@AnesPy</a>
+</footer>
+{% endblock %}
