@@ -107,6 +107,10 @@ body {
     gap: 20px;
     align-content: start;
 }
+.error-card {
+    text-align: center;
+    gap: 16px;
+}
 
 h1, p { margin: 0; }
 h1 {
@@ -250,6 +254,35 @@ body[data-theme="light"] input[type="file"] {
     justify-content: space-between;
     align-items: center;
     gap: 16px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.14);
+    color: var(--text);
+    font-weight: 700;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.status-badge .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #f87171;
+    box-shadow: 0 0 0 6px rgba(248, 113, 113, 0.22);
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .content-box, .file-name {

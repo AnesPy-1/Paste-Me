@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}یافت نشد{% endblock %}
+{% block content %}
+<section class="card hero error-card">
+    <div class="status-badge">
+        <span class="dot"></span>
+        <span>کد پیدا نشد</span>
+    </div>
+    <h1>۴۰۴ - اینجا چیزی نیست</h1>
+    <p class="subtitle">کدی که دنبالش هستی وجود ندارد یا منقضی شده. می‌توانی برگردی و یک پیست جدید بسازی.</p>
+    <div class="actions">
+        <a class="primary-button" href="{% url 'home' %}">بازگشت به صفحه اصلی</a>
+        <a class="tab-button active" href="{% url 'home' %}#text-panel">پیست متن جدید</a>
+    </div>
+</section>
+{% endblock %}

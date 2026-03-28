@@ -3,7 +3,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-y=d_vlhb@%8z8oyg(^*d--!n(wwxl7qur+=523rmz6a+!_u&)^"
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "pasteme.site", "www.pasteme.site"]
 PUBLIC_HOSTS = {"localhost", "127.0.0.1", "pasteme.site", "www.pasteme.site"}
 
