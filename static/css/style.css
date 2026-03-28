@@ -236,10 +236,9 @@ body[data-theme="light"] input[type="file"] {
 .code-box {
     padding: 18px 22px;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(14, 165, 233, 0.08));
-    border: 1px solid var(--border);
     font-size: clamp(2rem, 7vw, 3.5rem);
     text-align: center;
+    border: 1px solid var(--border);
 }
 
 .code-chip {
@@ -319,6 +318,17 @@ body[data-theme="light"] .content-box,
 body[data-theme="light"] .file-name,
 body[data-theme="light"] .image-preview {
     background: #f9fafb;
+}
+
+body[data-theme="dark"] .code-box {
+    background: #0b0f1a;
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+body[data-theme="light"] .code-box {
+    background: #f3f8f7;
+    color: #1f2933;
 }
 
 .secondary-link {
