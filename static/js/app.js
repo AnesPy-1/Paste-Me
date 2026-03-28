@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
     const tabs = document.querySelectorAll(".tab-button");
     const panels = document.querySelectorAll(".panel");
 
@@ -21,4 +21,19 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    const themeToggle = document.getElementById("theme-toggle");
+    if (themeToggle) {
+        const storedTheme = localStorage.getItem("theme");
+        const initialTheme = storedTheme || "dark";
+        document.body.dataset.theme = initialTheme;
+        themeToggle.textContent = initialTheme === "dark" ? "حالت روشن" : "حالت تاریک";
+
+        themeToggle.addEventListener("click", () => {
+            const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
+            document.body.dataset.theme = nextTheme;
+            localStorage.setItem("theme", nextTheme);
+            themeToggle.textContent = nextTheme === "dark" ? "حالت روشن" : "حالت تاریک";
+        });
+    }
 });

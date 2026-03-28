@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import redirect
+from django.utils.text import get_valid_filename
 from django.views.generic import DetailView, FormView, TemplateView, View
 
 from .forms import CodeLookupForm, FileUploadForm, TextPasteForm
@@ -48,9 +49,10 @@ class LookupRedirectView(FormView):
 
     def form_valid(self, form):
         code = form.cleaned_data["code"]
-        if not PasteItem.objects.filter(code=code).exists():
-            form.add_error("code", "محتوایی با این کد پیدا نشد.")
-            return self.form_invalid(form)
+        try:
+            PasteItem.objects.get(code=code)
+        except PasteItem.DoesNotExist:
+            raise Http404()
         return redirect("item-detail", code=code)
 
     def form_invalid(self, form):
@@ -71,6 +73,24 @@ class PasteItemDetailView(DetailView):
     slug_field = "code"
     slug_url_kwarg = "code"
     context_object_name = "item"
+
+
+class FileDownloadView(View):
+    http_method_names = ["get"]
+
+    def get(self, request, code):
+        try:
+            item = PasteItem.objects.get(code=code, file__isnull=False)
+        except PasteItem.DoesNotExist:
+            raise Http404()
+
+        if not item.file:
+            raise Http404()
+
+        safe_name = get_valid_filename(item.file_name) or "download"
+        response = FileResponse(item.file.open("rb"), as_attachment=True, filename=safe_name)
+        response["Content-Type"] = "application/octet-stream"
+        return response
 
 
 class RobotsTxtView(View):

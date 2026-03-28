@@ -12,7 +12,12 @@ class PublicHostMiddleware:
 
     def __call__(self, request):
         host = request.get_host().split(":")[0]
-        if not request.path.startswith("/admin/") and host not in settings.PUBLIC_HOSTS:
+        is_exempt_path = (
+            request.path.startswith("/admin/")
+            or request.path.startswith("/static/")
+            or request.path.startswith("/media/")
+        )
+        if not is_exempt_path and host not in settings.PUBLIC_HOSTS:
             return HttpResponseForbidden("Access denied.")
         return self.get_response(request)
 

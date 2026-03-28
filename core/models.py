@@ -1,4 +1,4 @@
-import random
+﻿import random
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -27,6 +27,13 @@ class PasteItem(models.Model):
     @property
     def file_name(self):
         return self.file.name.rsplit("/", 1)[-1] if self.file else ""
+
+    @property
+    def is_image(self):
+        if not self.file:
+            return False
+        ext = self.file_name.rsplit(".", 1)[-1].lower() if "." in self.file_name else ""
+        return ext in {"png", "jpg", "jpeg", "gif", "webp", "bmp"}
 
     def clean(self):
         if bool(self.content) == bool(self.file):

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% block title %}مشاهده محتوا{% endblock %}
 {% block content %}
 <section class="card detail-card">
@@ -13,7 +13,12 @@
     {% else %}
         <p class="muted">نام فایل</p>
         <p class="file-name">{{ item.file_name }}</p>
-        <a href="{{ item.file.url }}" class="download-link" download>دکمه دانلود</a>
+        {% if item.is_image %}
+            <div class="image-preview">
+                <img src="{{ item.file.url }}" alt="پیش نمایش تصویر">
+            </div>
+        {% endif %}
+        <a href="{% url 'download-file' item.code %}" class="download-link">دکمه دانلود</a>
     {% endif %}
 
     <a href="{% url 'home' %}" class="secondary-link">بازگشت به صفحه اصلی</a>

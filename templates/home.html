@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% block content %}
 <section class="card hero">
     <p class="eyebrow">pasteme</p>
@@ -25,6 +25,8 @@
             {% csrf_token %}
             {{ file_form.file }}
             {% if file_form.errors %}<p class="form-error">{{ file_form.errors.file.0 }}</p>{% endif %}
+            <p class="form-note">حداکثر حجم فایل ۱۰۰ مگابایت است.</p>
+            <p class="form-hint">مسئولیت فایل آپلود شده با شما است</p>
             <button type="submit" class="primary-button">آپلود فایل</button>
         </form>
     </section>
@@ -40,7 +42,7 @@
 </section>
 
 <footer class="footer">
-    made with ❤️ &amp; lots of ☕ by
+    <span class="muted">made with ❤️ by</span>
     <a href="https://t.me/AnesPy" target="_blank" rel="noopener noreferrer">@AnesPy</a>
 </footer>
 {% endblock %}
