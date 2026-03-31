@@ -1,11 +1,42 @@
+import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
+from environs import Env
 
-SECRET_KEY = "django-insecure-y=d_vlhb@%8z8oyg(^*d--!n(wwxl7qur+=523rmz6a+!_u&)^"
-DEBUG = False
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "pasteme.site", "www.pasteme.site"]
-PUBLIC_HOSTS = {"localhost", "127.0.0.1", "pasteme.site", "www.pasteme.site"}
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+env = Env()
+env.read_env(BASE_DIR / ".env")
+
+
+DEFAULT_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "pasteme.site",
+    "www.pasteme.site",
+    "testserver",
+]
+
+
+def get_secret_key():
+    key = env.str("DJANGO_SECRET_KEY", None)
+    if key:
+        return key
+    if env.bool("DJANGO_DEBUG", False):
+        return "dev-secret-key-change-me"
+    raise ImproperlyConfigured("DJANGO_SECRET_KEY is required when DEBUG is False.")
+
+
+DEBUG = env.bool("DJANGO_DEBUG", False)
+SECRET_KEY = get_secret_key()
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", DEFAULT_HOSTS)
+PUBLIC_HOSTS = set(env.list("DJANGO_PUBLIC_HOSTS", ALLOWED_HOSTS))
+CSRF_TRUSTED_ORIGINS = env.list(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    [f"https://{host}" for host in ALLOWED_HOSTS if host not in {"localhost", "127.0.0.1", "testserver"}],
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -15,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -69,16 +101,31 @@ DEFAULT_CHARSET = "utf-8"
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+WHITENOISE_MAX_AGE = 60 * 60 * 24 * 30  # cache busting already handled via manifest
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-FILE_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024
-DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 200 * 1024 * 1024
+DATA_UPLOAD_MAX_MEMORY_SIZE = 200 * 1024 * 1024
 FILE_UPLOAD_PERMISSIONS = 0o600
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o700
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

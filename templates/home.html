@@ -16,6 +16,7 @@
             {% csrf_token %}
             {{ text_form.content }}
             {% if text_form.errors %}<p class="form-error">{{ text_form.errors.content.0 }}</p>{% endif %}
+            <p class="legal-note">لطفاً از بارگذاری یا اشتراک ابزارهای دور زدن فیلترینگ و VPN خودداری کنید؛ مسئولیت محتوا بر عهده کاربر است.</p>
             <button type="submit" class="primary-button">پیست متن</button>
         </form>
     </section>
@@ -25,8 +26,9 @@
             {% csrf_token %}
             {{ file_form.file }}
             {% if file_form.errors %}<p class="form-error">{{ file_form.errors.file.0 }}</p>{% endif %}
-            <p class="form-note">حداکثر حجم فایل ۱۰۰ مگابایت است.</p>
+            <p class="form-note">حداکثر حجم فایل ۲۰۰ مگابایت است.</p>
             <p class="form-hint">مسئولیت فایل آپلود شده با شما است</p>
+            <p class="legal-note">هرگونه تلاش برای انتشار ابزارهای عبور از فیلترینگ یا VPN ممنوع است؛ لطفاً قوانین را رعایت کنید.</p>
             <button type="submit" class="primary-button">آپلود فایل</button>
         </form>
     </section>
@@ -38,10 +40,11 @@
             <button type="submit" class="primary-button">مشاهده</button>
         </form>
         {% if lookup_form.errors %}<p class="form-error">{{ lookup_form.errors.code.0 }}</p>{% endif %}
+        <p class="legal-note">انتشار یا درخواست ابزارهای نقض قوانین از جمله فیلترشکن ممنوع است.</p>
     </section>
 </section>
 
-<footer class="footer">
+<footer class="footer" dir="ltr">
     <span class="muted">made with ❤️ by</span>
     <a href="https://t.me/AnesPy" target="_blank" rel="noopener noreferrer">@AnesPy</a>
 </footer>

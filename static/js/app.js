@@ -24,16 +24,27 @@
 
     const themeToggle = document.getElementById("theme-toggle");
     if (themeToggle) {
+        const icon = themeToggle.querySelector(".theme-toggle__icon");
+        const label = themeToggle.querySelector(".theme-toggle__label");
+
         const storedTheme = localStorage.getItem("theme");
-        const initialTheme = storedTheme || "dark";
-        document.body.dataset.theme = initialTheme;
-        themeToggle.textContent = initialTheme === "dark" ? "حالت روشن" : "حالت تاریک";
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const initialTheme = storedTheme || (prefersDark ? "dark" : "light");
+
+        const applyTheme = (theme) => {
+            document.body.dataset.theme = theme;
+            localStorage.setItem("theme", theme);
+            const isDark = theme === "dark";
+            icon.textContent = isDark ? "🌙" : "☀️";
+            label.textContent = isDark ? "حالت روشن" : "حالت تاریک";
+            themeToggle.setAttribute("aria-pressed", String(isDark));
+        };
+
+        applyTheme(initialTheme);
 
         themeToggle.addEventListener("click", () => {
             const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
-            document.body.dataset.theme = nextTheme;
-            localStorage.setItem("theme", nextTheme);
-            themeToggle.textContent = nextTheme === "dark" ? "حالت روشن" : "حالت تاریک";
+            applyTheme(nextTheme);
         });
     }
 });

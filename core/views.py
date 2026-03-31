@@ -1,5 +1,5 @@
 from django.http import FileResponse, Http404, HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils.text import get_valid_filename
 from django.views.generic import DetailView, FormView, TemplateView, View
 
@@ -19,6 +19,12 @@ class HomeView(TemplateView):
         return context
 
 
+def render_home(request, **kwargs):
+    """Render the home page with provided form/context overrides."""
+    context = HomeView().get_context_data(**kwargs)
+    return render(request, HomeView.template_name, context)
+
+
 class TextCreateView(FormView):
     form_class = TextPasteForm
     http_method_names = ["post"]
@@ -28,7 +34,7 @@ class TextCreateView(FormView):
         return redirect("result", code=item.code)
 
     def form_invalid(self, form):
-        return HomeView.as_view()(self.request, text_form=form, active_panel="text-panel")
+        return render_home(self.request, text_form=form, active_panel="text-panel")
 
 
 class FileCreateView(FormView):
@@ -40,7 +46,7 @@ class FileCreateView(FormView):
         return redirect("result", code=item.code)
 
     def form_invalid(self, form):
-        return HomeView.as_view()(self.request, file_form=form, active_panel="file-panel")
+        return render_home(self.request, file_form=form, active_panel="file-panel")
 
 
 class LookupRedirectView(FormView):
@@ -56,7 +62,7 @@ class LookupRedirectView(FormView):
         return redirect("item-detail", code=code)
 
     def form_invalid(self, form):
-        return HomeView.as_view()(self.request, lookup_form=form, active_panel="lookup-panel")
+        return render_home(self.request, lookup_form=form, active_panel="lookup-panel")
 
 
 class ResultView(DetailView):

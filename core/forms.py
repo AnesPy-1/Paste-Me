@@ -20,7 +20,7 @@ class FileUploadForm(forms.Form):
     def clean_file(self):
         uploaded_file = self.cleaned_data["file"]
         if uploaded_file.size > settings.FILE_UPLOAD_MAX_MEMORY_SIZE:
-            raise forms.ValidationError("حجم فایل نباید بیشتر از ۱۰۰ مگابایت باشد.")
+            raise forms.ValidationError("حجم فایل نباید بیشتر از ۲۰۰ مگابایت باشد.")
         return uploaded_file
 
 

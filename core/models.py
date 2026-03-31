@@ -53,6 +53,11 @@ class PasteItem(models.Model):
                 return code
         raise RuntimeError("Could not generate a unique 6-digit code.")
 
+    def delete(self, *args, **kwargs):
+        if self.file:
+            self.file.delete(save=False)
+        super().delete(*args, **kwargs)
+
 
 class SiteSetting(models.Model):
     is_visible = models.BooleanField(default=True, verbose_name="نمایش سایت")
