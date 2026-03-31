@@ -22,14 +22,23 @@
     </section>
 
     <section id="file-panel" class="panel{% if active_panel == 'file-panel' %} active{% endif %}">
-        <form method="post" action="{% url 'upload-file' %}" enctype="multipart/form-data" class="stack-form">
+        <form id="upload-form" method="post" action="{% url 'upload-file' %}" enctype="multipart/form-data" class="stack-form">
             {% csrf_token %}
             {{ file_form.file }}
             {% if file_form.errors %}<p class="form-error">{{ file_form.errors.file.0 }}</p>{% endif %}
             <p class="form-note">حداکثر حجم فایل ۲۰۰ مگابایت است.</p>
-            <p class="form-hint">مسئولیت فایل آپلود شده با شما است</p>
             <p class="legal-note">هرگونه تلاش برای انتشار ابزارهای عبور از فیلترینگ یا VPN ممنوع است؛ لطفاً قوانین را رعایت کنید.</p>
-            <button type="submit" class="primary-button">آپلود فایل</button>
+            <button type="submit" id="upload-button" class="primary-button">آپلود فایل</button>
+            <div id="upload-progress" class="progress" hidden>
+                <div class="progress__head">
+                    <span>در حال آپلود...</span>
+                    <span id="upload-percent">۰٪</span>
+                </div>
+                <div class="progress__bar">
+                    <div id="upload-bar" class="progress__bar-fill" style="width:0%"></div>
+                </div>
+                <p id="upload-status" class="progress__status"></p>
+            </div>
         </form>
     </section>
 

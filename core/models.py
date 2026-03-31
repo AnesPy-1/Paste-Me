@@ -9,12 +9,14 @@ def upload_to(instance, filename):
 
 
 class PasteItem(models.Model):
-    code = models.CharField(max_length=6, unique=True, editable=False)
-    content = models.TextField(blank=True, null=True)
-    file = models.FileField(upload_to=upload_to, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    code = models.CharField("کد", max_length=6, unique=True, editable=False)
+    content = models.TextField("متن", blank=True, null=True)
+    file = models.FileField("فایل", upload_to=upload_to, blank=True, null=True)
+    created_at = models.DateTimeField("تاریخ ایجاد", auto_now_add=True)
 
     class Meta:
+        verbose_name = "مورد پیست"
+        verbose_name_plural = "موردهای پیست"
         ordering = ["-created_at"]
 
     def __str__(self):

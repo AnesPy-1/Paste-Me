@@ -1,5 +1,6 @@
-from django.http import FileResponse, Http404, HttpResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.text import get_valid_filename
 from django.views.generic import DetailView, FormView, TemplateView, View
 
@@ -43,9 +44,20 @@ class FileCreateView(FormView):
 
     def form_valid(self, form):
         item = PasteItem.objects.create(file=form.cleaned_data["file"])
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse(
+                {
+                    "ok": True,
+                    "redirect_url": reverse("result", kwargs={"code": item.code}),
+                    "code": item.code,
+                },
+                status=201,
+            )
         return redirect("result", code=item.code)
 
     def form_invalid(self, form):
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse({"ok": False, "errors": form.errors}, status=400)
         return render_home(self.request, file_form=form, active_panel="file-panel")
 
 
@@ -96,6 +108,8 @@ class FileDownloadView(View):
         safe_name = get_valid_filename(item.file_name) or "download"
         response = FileResponse(item.file.open("rb"), as_attachment=True, filename=safe_name)
         response["Content-Type"] = "application/octet-stream"
+        if item.file and hasattr(item.file, "size"):
+            response["Content-Length"] = item.file.size
         return response
 
 
