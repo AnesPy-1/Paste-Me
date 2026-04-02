@@ -12,8 +12,9 @@ class PublicHostMiddleware:
 
     def __call__(self, request):
         host = request.get_host().split(":")[0]
+        admin_prefix = f"/{settings.ADMIN_URL_PATH.strip('/')}/"
         is_exempt_path = (
-            request.path.startswith("/admin/")
+            request.path.startswith(admin_prefix)
             or request.path.startswith("/static/")
             or request.path.startswith("/media/")
         )
@@ -27,7 +28,8 @@ class SiteVisibilityMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith("/admin/"):
+        admin_prefix = f"/{settings.ADMIN_URL_PATH.strip('/')}/"
+        if request.path.startswith(admin_prefix):
             return self.get_response(request)
 
         try:
@@ -45,5 +47,6 @@ class NoIndexMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        response["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet, noimageindex"
+        if not settings.SEARCH_INDEXABLE:
+            response["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet, noimageindex"
         return response

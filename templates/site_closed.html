@@ -1,9 +1,13 @@
 ﻿{% extends "base.html" %}
 {% block title %}سایت غیرفعال است{% endblock %}
+{% block meta_robots %}noindex, nofollow, noarchive{% endblock %}
 {% block content %}
-<section class="card result-card">
+<section class="card hero error-card">
+    <p class="eyebrow">maintenance mode</p>
     <h1>سایت موقتا غیرفعال است</h1>
-    <p class="muted">در حال حاضر فقط پنل مدیریت در دسترس است.</p>
-    <a href="/admin/" class="primary-button">ورود به ادمین</a>
+    <p class="subtitle">لطفا بعدا دوباره تلاش کنید.</p>
+    <p class="muted">پشتیبانی:
+        <a href="https://t.me/AnesPy" target="_blank" rel="noopener noreferrer" class="secondary-link">@AnesPy</a>
+    </p>
 </section>
 {% endblock %}

@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
@@ -33,6 +34,9 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 SECRET_KEY = get_secret_key()
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", DEFAULT_HOSTS)
 PUBLIC_HOSTS = set(env.list("DJANGO_PUBLIC_HOSTS", ALLOWED_HOSTS))
+ADMIN_URL_PATH = env.str("DJANGO_ADMIN_PATH", "pasteme-admin/").strip("/")
+ADMIN_URL_PATH = f"{ADMIN_URL_PATH}/"
+SEARCH_INDEXABLE = env.bool("DJANGO_SEARCH_INDEXABLE", True)
 CSRF_TRUSTED_ORIGINS = env.list(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
     [f"https://{host}" for host in ALLOWED_HOSTS if host not in {"localhost", "127.0.0.1", "testserver"}],
@@ -44,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sitemaps",
     "django.contrib.staticfiles",
     "core",
     "storages",
@@ -76,6 +81,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.site_settings",
             ],
         },
     },
@@ -108,13 +114,18 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            if "test" in sys.argv
+            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
     },
 }
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+MAX_UPLOAD_SIZE = env.int("PASTEME_MAX_UPLOAD_SIZE", 200 * 1024 * 1024)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 200 * 1024 * 1024
 DATA_UPLOAD_MAX_MEMORY_SIZE = 200 * 1024 * 1024
 FILE_UPLOAD_PERMISSIONS = 0o600

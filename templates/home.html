@@ -1,4 +1,28 @@
 ﻿{% extends "base.html" %}
+{% block title %}PasteMe | پیست می | کلیپبورد آنلاین{% endblock %}
+{% block meta_description %}PasteMe (پیست می) یک کلیپبورد آنلاین برای اشتراک سریع متن و فایل با کد ۶ رقمی است. ساخته شده توسط @AnesPy.{% endblock %}
+{% block meta_keywords %}PasteMe, پیست می, کلیپبورد آنلاین, آنلاین کلیپ بورد, اشتراک سریع فایل, اشتراک متن, online clipboard, @AnesPy{% endblock %}
+{% block og_title %}PasteMe | پیست می{% endblock %}
+{% block og_description %}کلیپبورد آنلاین PasteMe برای ارسال سریع متن و فایل با کد ۶ رقمی.{% endblock %}
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PasteMe",
+  "alternateName": "پیست می",
+  "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'home' %}",
+  "description": "کلیپبورد آنلاین برای اشتراک سریع متن و فایل",
+  "author": {
+    "@type": "Person",
+    "name": "Anes",
+    "alternateName": "@AnesPy",
+    "url": "https://t.me/AnesPy"
+  },
+  "keywords": "PasteMe, پیست می, کلیپبورد آنلاین, online clipboard, @AnesPy"
+}
+</script>
+{% endblock %}
 {% block content %}
 <section class="card hero">
     <p class="eyebrow">pasteme</p>
@@ -8,7 +32,7 @@
     <div class="tab-actions">
         <button class="tab-button{% if active_panel == 'text-panel' %} active{% endif %}" type="button" data-target="text-panel">پیست متن</button>
         <button class="tab-button{% if active_panel == 'file-panel' %} active{% endif %}" type="button" data-target="file-panel">آپلود فایل</button>
-        <button class="tab-button{% if active_panel == 'lookup-panel' %} active{% endif %}" type="button" data-target="lookup-panel">مشاهده با کد</button>
+        <button class="tab-button{% if active_panel == 'lookup-panel' %} active{% endif %}" type="button" data-target="lookup-panel">مشاهده کلیپبورد</button>
     </div>
 
     <section id="text-panel" class="panel{% if active_panel == 'text-panel' %} active{% endif %}">
@@ -16,18 +40,18 @@
             {% csrf_token %}
             {{ text_form.content }}
             {% if text_form.errors %}<p class="form-error">{{ text_form.errors.content.0 }}</p>{% endif %}
-            <p class="legal-note">لطفاً از بارگذاری یا اشتراک ابزارهای دور زدن فیلترینگ و VPN خودداری کنید؛ مسئولیت محتوا بر عهده کاربر است.</p>
+            <p class="legal-note">لطفاً از بارگذاری یا اشتراک ابزارهای دور زدن فیلترینگ و VPN و همچنین محتوای مستهجن خودداری کنید؛ مسئولیت محتوا بر عهده کاربر است.</p>
             <button type="submit" class="primary-button">پیست متن</button>
         </form>
     </section>
 
     <section id="file-panel" class="panel{% if active_panel == 'file-panel' %} active{% endif %}">
-        <form id="upload-form" method="post" action="{% url 'upload-file' %}" enctype="multipart/form-data" class="stack-form">
+        <form id="upload-form" method="post" action="{% url 'upload-file' %}" enctype="multipart/form-data" class="stack-form" data-max-upload-bytes="{{ max_upload_size }}">
             {% csrf_token %}
             {{ file_form.file }}
             {% if file_form.errors %}<p class="form-error">{{ file_form.errors.file.0 }}</p>{% endif %}
             <p class="form-note">حداکثر حجم فایل ۲۰۰ مگابایت است.</p>
-            <p class="legal-note">هرگونه تلاش برای انتشار ابزارهای عبور از فیلترینگ یا VPN ممنوع است؛ لطفاً قوانین را رعایت کنید.</p>
+            <p class="legal-note">هرگونه تلاش برای انتشار ابزارهای عبور از فیلترینگ یا VPN و نیز محتوای مستهجن ممنوع است؛ لطفاً قوانین را رعایت کنید.</p>
             <button type="submit" id="upload-button" class="primary-button">آپلود فایل</button>
             <div id="upload-progress" class="progress" hidden>
                 <div class="progress__head">
@@ -35,7 +59,7 @@
                     <span id="upload-percent">۰٪</span>
                 </div>
                 <div class="progress__bar">
-                    <div id="upload-bar" class="progress__bar-fill" style="width:0%"></div>
+                    <div id="upload-bar" class="progress__bar-fill"></div>
                 </div>
                 <p id="upload-status" class="progress__status"></p>
             </div>
@@ -46,10 +70,9 @@
         <form method="post" action="{% url 'lookup' %}" class="lookup-form">
             {% csrf_token %}
             {{ lookup_form.code }}
-            <button type="submit" class="primary-button">مشاهده</button>
+            <button type="submit" class="primary-button">مشاهده کلیپبورد</button>
         </form>
         {% if lookup_form.errors %}<p class="form-error">{{ lookup_form.errors.code.0 }}</p>{% endif %}
-        <p class="legal-note">انتشار یا درخواست ابزارهای نقض قوانین از جمله فیلترشکن ممنوع است.</p>
     </section>
 </section>
 

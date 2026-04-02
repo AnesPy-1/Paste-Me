@@ -1,5 +1,6 @@
 ﻿{% extends "base.html" %}
 {% block title %}مشاهده محتوا{% endblock %}
+{% block meta_robots %}noindex, nofollow, noarchive{% endblock %}
 {% block content %}
 <section class="card detail-card">
     <div class="detail-head">
@@ -15,7 +16,7 @@
         <p class="file-name">{{ item.file_name }}</p>
         {% if item.is_image %}
             <div class="image-preview">
-                <img src="{{ item.file.url }}" alt="پیش نمایش تصویر">
+                <img src="{{ item.file.url }}" alt="پیش نمایش تصویر" loading="lazy" decoding="async">
             </div>
         {% endif %}
         <a href="{% url 'download-file' item.code %}" class="download-link">دکمه دانلود</a>

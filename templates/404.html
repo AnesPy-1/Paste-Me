@@ -1,16 +1,25 @@
 {% extends "base.html" %}
 {% block title %}یافت نشد{% endblock %}
+{% block meta_robots %}noindex, nofollow, noarchive{% endblock %}
 {% block content %}
-<section class="card hero error-card">
+<section class="card hero error-card error-404-card">
     <div class="status-badge">
         <span class="dot"></span>
-        <span>کد پیدا نشد</span>
+        <span>صفحه یافت نشد</span>
     </div>
-    <h1>۴۰۴ - اینجا چیزی نیست</h1>
-    <p class="subtitle">کدی که دنبالش هستی وجود ندارد یا منقضی شده. می‌توانی برگردی و یک پیست جدید بسازی.</p>
+
+    <div class="error-404-visual" aria-hidden="true">
+        <div class="error-404-orbit"></div>
+        <div class="error-404-core">404</div>
+        <span class="error-404-pulse"></span>
+    </div>
+
+    <h1>۴۰۴ - مسیر اشتباهه</h1>
+    <p class="subtitle">این آدرس وجود ندارد یا حذف شده است. از دکمه‌های پایین مسیر درست را انتخاب کن.</p>
+
     <div class="actions">
         <a class="primary-button" href="{% url 'home' %}">بازگشت به صفحه اصلی</a>
-        <a class="tab-button active" href="{% url 'home' %}#text-panel">پیست متن جدید</a>
+        <a class="tab-button active" href="{% url 'home' %}#lookup-panel">جستجو با کد</a>
     </div>
 </section>
 {% endblock %}

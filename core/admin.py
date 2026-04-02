@@ -21,6 +21,7 @@ class PasteItemAdmin(admin.ModelAdmin):
 class SiteSettingAdmin(admin.ModelAdmin):
     list_display = ("is_visible", "updated_at")
     readonly_fields = ("updated_at",)
+    fields = ("is_visible", "brand_logo", "brand_icon", "updated_at")
 
     def has_add_permission(self, request):
         return not SiteSetting.objects.exists()

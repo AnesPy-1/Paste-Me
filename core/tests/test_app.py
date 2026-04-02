@@ -100,6 +100,7 @@ class MiddlewareTests(TestCase):
         response = middleware(request)
         self.assertEqual(response.status_code, 503)
 
+    @override_settings(SEARCH_INDEXABLE=False)
     def test_noindex_header_added(self):
         request = self.rf.get("/")
         middleware = NoIndexMiddleware(lambda req: HttpResponse("ok"))
@@ -108,3 +109,10 @@ class MiddlewareTests(TestCase):
             response["X-Robots-Tag"],
             "noindex, nofollow, noarchive, nosnippet, noimageindex",
         )
+
+    @override_settings(SEARCH_INDEXABLE=True)
+    def test_noindex_header_not_added_when_indexable(self):
+        request = self.rf.get("/")
+        middleware = NoIndexMiddleware(lambda req: HttpResponse("ok"))
+        response = middleware(request)
+        self.assertNotIn("X-Robots-Tag", response)

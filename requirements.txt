@@ -4,3 +4,4 @@ environs[django]==9.5.0
 django-storages==1.14.2
 boto3==1.34.76
 python-dotenv==1.0.1
+Pillow==12.0.0

@@ -1,11 +1,27 @@
 ﻿import random
 
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 
 
 def upload_to(instance, filename):
     return f"uploads/{instance.code}/{filename}"
+
+
+def branding_upload(instance, filename):
+    return f"branding/{filename}"
+
+
+validate_brand_logo_file = FileExtensionValidator(
+    allowed_extensions=["svg", "png", "webp", "jpg", "jpeg"],
+    message="فرمت لوگو باید یکی از SVG, PNG, WEBP, JPG, JPEG باشد.",
+)
+
+validate_brand_icon_file = FileExtensionValidator(
+    allowed_extensions=["svg", "png", "ico"],
+    message="فرمت آیکن باید یکی از SVG, PNG, ICO باشد.",
+)
 
 
 class PasteItem(models.Model):
@@ -63,6 +79,22 @@ class PasteItem(models.Model):
 
 class SiteSetting(models.Model):
     is_visible = models.BooleanField(default=True, verbose_name="نمایش سایت")
+    brand_logo = models.FileField(
+        "لوگو هدر",
+        upload_to=branding_upload,
+        validators=[validate_brand_logo_file],
+        blank=True,
+        null=True,
+        help_text="بهتر است PNG/SVG با پس‌زمینه شفاف و عرض حداقل 320 پیکسل باشد.",
+    )
+    brand_icon = models.FileField(
+        "آیکن (favicon)",
+        upload_to=branding_upload,
+        validators=[validate_brand_icon_file],
+        blank=True,
+        null=True,
+        help_text="SVG یا PNG یا ICO مربعی 64×64 یا بزرگ‌تر برای نمایش آیکن مرورگر.",
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -70,7 +102,7 @@ class SiteSetting(models.Model):
         verbose_name_plural = "تنظیم سایت"
 
     def __str__(self):
-        return "Site Settings"
+        return "تنظیمات سایت"
 
     def save(self, *args, **kwargs):
         self.pk = 1

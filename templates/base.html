@@ -4,15 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
-    <title>{% block title %}PASTE ME{% endblock %}</title>
+    <title>{% block title %}PasteMe | پیست می{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}PasteMe (پیست می) کلیپبورد آنلاین برای اشتراک سریع متن و فایل با لینک و کد کوتاه ۶ رقمی.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}PasteMe, پیست می, کلیپبورد آنلاین, اشتراک فایل, اشتراک متن, online clipboard, @AnesPy{% endblock %}">
+    <meta name="author" content="Anes (@AnesPy)">
+    <meta name="creator" content="@AnesPy">
+    <meta name="robots" content="{% block meta_robots %}{% if search_indexable %}index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1{% else %}noindex,nofollow,noarchive,nosnippet,noimageindex{% endif %}{% endblock %}">
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fa_IR">
+    <meta property="og:site_name" content="PasteMe | پیست می">
+    <meta property="og:title" content="{% block og_title %}PasteMe | پیست می{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}کلیپبورد آنلاین PasteMe برای اشتراک سریع متن و فایل.{% endblock %}">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}PasteMe | پیست می{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}کلیپبورد آنلاین PasteMe برای اشتراک سریع متن و فایل.{% endblock %}">
     <link rel="preload" href="{% static 'fonts/Vazirmatn-Variable.woff2' %}" as="font" type="font/woff2" crossorigin>
+    {% if site_settings.brand_icon %}
+    <link rel="icon" href="{{ site_settings.brand_icon.url }}">
+    {% else %}
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+    {% endif %}
+    {% if site_settings.brand_logo %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_settings.brand_logo.url }}">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_settings.brand_logo.url }}">
+    {% endif %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
 </head>
-<body data-theme="dark">
+<body data-theme="dark" class="no-js">
+    <div class="preloader" id="preloader" aria-hidden="true">
+        <div class="preloader__core">
+            <span class="preloader__word">PASTEME</span>
+            <span class="preloader__line"></span>
+        </div>
+    </div>
     <header class="topbar">
-        <div class="brand">پیست می</div>
+        <div class="brand">
+            {% if site_settings.brand_logo %}
+                <img src="{{ site_settings.brand_logo.url }}" alt="لوگو پیست‌می" class="brand__logo">
+            {% else %}
+                پیست می
+            {% endif %}
+        </div>
     </header>
+    {% if messages %}
+    <section class="flash-stack" aria-live="polite" aria-label="پیام‌های سیستم">
+        {% for message in messages %}
+        <article class="flash flash--{{ message.tags|default:'info' }}" role="status">
+            <p class="flash__text">{{ message }}</p>
+            <button type="button" class="flash__close" data-flash-dismiss aria-label="بستن پیام">×</button>
+        </article>
+        {% endfor %}
+    </section>
+    {% endif %}
     <main class="page-shell">
         {% block content %}{% endblock %}
     </main>
