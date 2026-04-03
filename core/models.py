@@ -77,6 +77,35 @@ class PasteItem(models.Model):
         super().delete(*args, **kwargs)
 
 
+class Wallet(models.Model):
+    NETWORK_CHOICES = [
+        ("bitcoin", "Bitcoin"),
+        ("ethereum", "Ethereum"),
+        ("tron", "Tron (TRX)"),
+        ("litecoin", "Litecoin"),
+        ("ripple", "Ripple (XRP)"),
+        ("solana", "Solana"),
+        ("dogecoin", "Dogecoin"),
+        ("monero", "Monero"),
+        ("other", "سایر"),
+    ]
+
+    network = models.CharField("شبکه", max_length=20, choices=NETWORK_CHOICES)
+    address = models.TextField("آدرس ولت")
+    description = models.CharField("توضیح", max_length=200, blank=True, help_text="مثال: Ethereum Wallet")
+    order = models.PositiveIntegerField("ترتیب", default=0)
+    is_active = models.BooleanField("فعال", default=True)
+    created_at = models.DateTimeField("تاریخ ایجاد", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "ولت دونیشن"
+        verbose_name_plural = "ولت های دونیشن"
+        ordering = ["order", "-created_at"]
+
+    def __str__(self):
+        return f"{self.get_network_display()} - {self.description or self.address[:20]}..."
+
+
 class SiteSetting(models.Model):
     is_visible = models.BooleanField(default=True, verbose_name="نمایش سایت")
     brand_logo = models.FileField(
@@ -94,6 +123,18 @@ class SiteSetting(models.Model):
         blank=True,
         null=True,
         help_text="SVG یا PNG یا ICO مربعی 64×64 یا بزرگ‌تر برای نمایش آیکن مرورگر.",
+    )
+    reymit_link = models.URLField("لینک Reymit", blank=True, help_text="لینک حساب Reymit شما برای پذیرش پرداخت")
+    author_username = models.CharField(
+        "نام کاربری سازنده",
+        max_length=50,
+        default="AnesPy",
+        help_text="مثال: @AnesPy (بدون نماد @)"
+    )
+    author_url = models.URLField(
+        "لینک پروفایل سازنده",
+        default="https://t.me/AnesPy",
+        help_text="URL پروفایل یا صفحه شخصی سازنده"
     )
     updated_at = models.DateTimeField(auto_now=True)
 

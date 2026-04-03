@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}حمایت و دونیشن | پیست می{% endblock %}
+
+{% block meta_description %}صفحه دونیشن و حمایت از پروژه پیست می. میتونید از طریق Reymit حمایت کنید.{% endblock %}
+
+{% block meta_keywords %}دونیشن، حمایت، Reymit، پیست می{% endblock %}
+
+{% block og_title %}حمایت و دونیشن | پیست می{% endblock %}
+
+{% block og_description %}صفحه دونیشن و حمایت از پروژه پیست می.{% endblock %}
+
+{% block content %}
+<section class="card hero donation-hero">
+    <p class="eyebrow">حمایت</p>
+    <h1>💝 حمایت کنید</h1>
+    <p class="subtitle">اگه پیست می برای شما مفید بوده، میتونید ما را حمایت کنید</p>
+
+    <div class="donation-content">
+        {% if reymit_link %}
+        <div class="donation-card">
+            <h2 class="donation-card__title">🌍 از طریق Reymit</h2>
+            <p class="donation-card__description">
+                میتونید از طریق Reymit حمایت کنید.
+            </p>
+            <a href="{{ reymit_link }}" target="_blank" rel="noopener noreferrer" class="primary-button donation-button">
+                جهت حمایت کلیک کنید →
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="donation-card">
+            <h2 class="donation-card__title">❤️ از شما ممنونیم</h2>
+            <p class="donation-card__description">
+                تشکر برای هر کمکی که انجام میدید! حمایت شما کمک می‌کند تا ما بتونیم پیست می رو بهتر کنیم و ویژگی‌های جدید اضافه کنیم.
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+.donation-hero {
+    margin-top: 80px;
+}
+
+.donation-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.donation-card {
+    background: linear-gradient(135deg, rgba(255, 0, 42, 0.1), rgba(255, 84, 121, 0.05));
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.donation-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(255, 12, 58, 0.15);
+    transform: translateY(-2px);
+}
+
+.donation-card__title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.donation-card__description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+}
+
+.donation-button {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .donation-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .donation-hero {
+        margin-top: 60px;
+    }
+}
+</style>
+{% endblock %}

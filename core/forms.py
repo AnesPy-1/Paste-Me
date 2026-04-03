@@ -16,10 +16,11 @@ class TextPasteForm(forms.Form):
 
 class FileUploadForm(forms.Form):
     file = forms.FileField(
-        label="",
+        label="انتخاب فایل",
         widget=forms.ClearableFileInput(
             attrs={
                 "data-max-size": str(settings.MAX_UPLOAD_SIZE),
+                "class": "file-input",
             }
         ),
     )

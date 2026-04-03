@@ -1,13 +1,9 @@
-import os
 import sys
 from pathlib import Path
 
-from django.core.exceptions import ImproperlyConfigured
-from dotenv import load_dotenv
 from environs import Env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
 env = Env()
 env.read_env(BASE_DIR / ".env")
 
@@ -21,17 +17,8 @@ DEFAULT_HOSTS = [
 ]
 
 
-def get_secret_key():
-    key = env.str("DJANGO_SECRET_KEY", None)
-    if key:
-        return key
-    if env.bool("DJANGO_DEBUG", False):
-        return "dev-secret-key-change-me"
-    raise ImproperlyConfigured("DJANGO_SECRET_KEY is required when DEBUG is False.")
-
-
 DEBUG = env.bool("DJANGO_DEBUG", False)
-SECRET_KEY = get_secret_key()
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", "dev-secret-key-change-me-in-production")
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", DEFAULT_HOSTS)
 PUBLIC_HOSTS = set(env.list("DJANGO_PUBLIC_HOSTS", ALLOWED_HOSTS))
 ADMIN_URL_PATH = env.str("DJANGO_ADMIN_PATH", "pasteme-admin/").strip("/")

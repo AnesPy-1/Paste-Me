@@ -87,6 +87,13 @@ body::before {
     animation: moveGlow 20s var(--ease-soft) infinite alternate;
 }
 
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    body::before {
+        animation: none;
+        opacity: 0.5;
+    }
+}
+
 body::after {
     content: "";
     position: fixed;
@@ -182,6 +189,17 @@ body::after {
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.64));
 }
 
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    .topbar {
+        backdrop-filter: none;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.88));
+    }
+    
+    .topbar--scrolled {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.92));
+    }
+}
+
 .flash-stack {
     position: fixed;
     top: 72px;
@@ -226,6 +244,12 @@ body::after {
 .flash--info {
     background: rgba(13, 24, 44, 0.9);
     border-color: rgba(101, 177, 255, 0.48);
+}
+
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    .flash {
+        backdrop-filter: none;
+    }
 }
 
 .flash__text {
@@ -340,6 +364,18 @@ body::after {
     z-index: 1;
 }
 
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    .card {
+        backdrop-filter: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.48);
+    }
+    
+    .card::before,
+    .card::after {
+        display: none;
+    }
+}
+
 .hero,
 .result-card,
 .detail-card {
@@ -447,6 +483,21 @@ body::after {
     border: 1px solid rgba(255, 0, 42, 0.34);
     z-index: 1;
     animation: error404Pulse 2.2s ease-out infinite;
+}
+
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    .error-404-core {
+        animation: none;
+    }
+    
+    .error-404-orbit {
+        animation: none;
+    }
+    
+    .error-404-pulse {
+        animation: none;
+        opacity: 0;
+    }
 }
 
 h1,
@@ -641,13 +692,14 @@ input[type="file"] {
 input[type="file"]::file-selector-button {
     border: 1px solid rgba(255, 18, 72, 0.44);
     border-radius: var(--radius-pill);
-    padding: 10px 14px;
-    margin-inline-start: 10px;
+    padding: 8px 12px;
+    margin-inline-start: 8px;
     font: inherit;
-    font-weight: 800;
+    font-weight: 700;
+    font-size: 0.95rem;
     color: #0a0002;
     background: linear-gradient(120deg, var(--primary), var(--accent));
-    box-shadow: 0 8px 18px rgba(255, 0, 42, 0.24);
+    box-shadow: 0 6px 14px rgba(255, 0, 42, 0.2);
     cursor: pointer;
     transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
 }
@@ -655,7 +707,7 @@ input[type="file"]::file-selector-button {
 input[type="file"]:hover::file-selector-button {
     transform: translateY(-1px);
     background: linear-gradient(120deg, var(--primary-dark), var(--accent));
-    box-shadow: 0 12px 22px rgba(255, 0, 42, 0.3);
+    box-shadow: 0 10px 18px rgba(255, 0, 42, 0.26);
 }
 
 input[type="file"]:active::file-selector-button {
@@ -665,13 +717,14 @@ input[type="file"]:active::file-selector-button {
 input[type="file"]::-webkit-file-upload-button {
     border: 1px solid rgba(255, 18, 72, 0.44);
     border-radius: var(--radius-pill);
-    padding: 10px 14px;
-    margin-inline-start: 10px;
+    padding: 8px 12px;
+    margin-inline-start: 8px;
     font: inherit;
-    font-weight: 800;
+    font-weight: 700;
+    font-size: 0.95rem;
     color: #0a0002;
     background: linear-gradient(120deg, var(--primary), var(--accent));
-    box-shadow: 0 8px 18px rgba(255, 0, 42, 0.24);
+    box-shadow: 0 6px 14px rgba(255, 0, 42, 0.2);
     cursor: pointer;
 }
 
@@ -714,6 +767,17 @@ input[type="file"]:focus-visible {
 .form-hint {
     color: var(--muted);
     font-size: 0.95rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.file-input {
+    padding: 12px 10px !important;
 }
 
 .legal-note {
@@ -1074,5 +1138,48 @@ body.is-lite .flash {
         opacity: 1;
         transform: none;
     }
+}
+
+/* Topbar Navigation */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    order: 1;
+}
+
+.topbar__nav {
+    order: 2;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.topbar__link {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color var(--duration-fast) var(--ease-out);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+}
+
+.topbar__link:hover {
+    color: var(--accent);
+}
+
+.topbar__link--donation {
+    background: linear-gradient(135deg, rgba(255, 0, 42, 0.22), rgba(255, 84, 121, 0.12));
+    border: 1px solid rgba(255, 20, 68, 0.3);
+    padding: 0.5rem 1rem;
+}
+
+.topbar__link--donation:hover {
+    background: linear-gradient(135deg, rgba(255, 0, 42, 0.32), rgba(255, 84, 121, 0.22));
+    border-color: rgba(255, 20, 68, 0.5);
 }
 

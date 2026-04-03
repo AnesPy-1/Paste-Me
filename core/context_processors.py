@@ -14,4 +14,7 @@ def site_settings(request):
         "site_settings": site_setting,
         "search_indexable": settings.SEARCH_INDEXABLE,
         "admin_url_path": settings.ADMIN_URL_PATH,
+        "reymit_logo_url": "/static/img/reymit-logo.png",
+        "author_mention": f"@{site_setting.author_username}",
+        "author_url": site_setting.author_url,
     }

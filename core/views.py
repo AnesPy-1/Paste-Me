@@ -8,7 +8,7 @@ from django.utils.text import get_valid_filename
 from django.views.generic import DetailView, FormView, TemplateView, View
 
 from .forms import CodeLookupForm, FileUploadForm, TextPasteForm
-from .models import PasteItem
+from .models import PasteItem, SiteSetting, Wallet
 
 
 class HomeView(TemplateView):
@@ -169,3 +169,13 @@ class RobotsTxtView(View):
             f"Sitemap: {sitemap_url}",
         ]
         return HttpResponse("\n".join(lines) + "\n", content_type="text/plain; charset=utf-8")
+
+
+class DonationView(TemplateView):
+    template_name = "donation.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        site_settings = SiteSetting.load()
+        context["reymit_link"] = site_settings.reymit_link
+        return context
